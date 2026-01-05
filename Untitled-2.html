@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Landing - Implementación | AYC Salud</title>
+  <meta name="description" content="Implementación normativa en salud con acompañamiento legal y técnico." />
+
+  <style>
+    :root{
+      /* Paleta azul bonita */
+      --bg: #070B1A;
+      --card: rgba(255,255,255,.06);
+      --card2: rgba(255,255,255,.08);
+      --stroke: rgba(255,255,255,.12);
+
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+
+      --blue1:#2F6BFF;
+      --blue2:#20C6FF;
+      --blue3:#00E2C3;
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue", sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 15% 10%, rgba(47,107,255,.35), transparent 60%),
+        radial-gradient(900px 500px at 85% 15%, rgba(32,198,255,.25), transparent 55%),
+        radial-gradient(900px 600px at 60% 90%, rgba(0,226,195,.18), transparent 55%),
+        linear-gradient(180deg, #050815, #06091A 55%, #040612);
+      overflow-x:hidden;
+    }
+
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:1100px; margin:0 auto; padding:28px 20px 80px}
+
+    /* Header */
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:16px; padding:10px 0 22px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px;
+    }
+    .logo{
+      width:40px; height:40px; border-radius:12px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,.25), transparent 55%),
+        linear-gradient(135deg, var(--blue1), var(--blue2));
+      box-shadow: 0 10px 30px rgba(47,107,255,.25);
+      border:1px solid rgba(255,255,255,.18);
+    }
+    .brand b{letter-spacing:.2px}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      backdrop-filter: blur(10px);
+      font-size: 13px;
+      color: var(--muted);
+      white-space:nowrap;
+    }
+    .dot{
+      width:8px; height:8px; border-radius:999px;
+      background: linear-gradient(135deg, var(--blue2), var(--blue3));
+      box-shadow: 0 0 18px rgba(32,198,255,.45);
+    }
+
+    /* Hero */
+    .hero{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:22px;
+      align-items:stretch;
+      margin-top: 10px;
+    }
+    @media (max-width: 920px){
+      .hero{grid-template-columns:1fr}
+    }
+
+    .panel{
+      position:relative;
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .panel::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(600px 300px at 20% 15%, rgba(47,107,255,.35), transparent 60%),
+        radial-gradient(700px 320px at 85% 20%, rgba(32,198,255,.20), transparent 62%);
+      filter: blur(0px);
+      opacity:.85;
+      pointer-events:none;
+    }
+    .panel-inner{
+      position:relative;
+      padding: 26px;
+    }
+
+    .kicker{
+      display:inline-flex; align-items:center; gap:10px;
+      padding: 8px 12px;
+      border-radius:999px;
+      background: rgba(0,0,0,.20);
+      border:1px solid rgba(255,255,255,.12);
+      color: rgba(255,255,255,.78);
+      font-size: 13px;
+      width: fit-content;
+    }
+    .kicker .spark{
+      width:18px; height:18px; border-radius:6px;
+      background: linear-gradient(135deg, var(--blue1), var(--blue2));
+      box-shadow: 0 0 24px rgba(47,107,255,.35);
+    }
+
+    h1{
+      margin: 14px 0 10px;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height:1.08;
+      letter-spacing: -0.02em;
+    }
+    .sub{
+      margin:0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height:1.6;
+      max-width: 60ch;
+    }
+
+    .cta-row{
+      display:flex; gap:12px; flex-wrap:wrap;
+      margin-top: 18px;
+      align-items:center;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center; justify-content:center;
+      gap:10px;
+      padding: 12px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.92);
+      cursor:pointer;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease;
+      user-select:none;
+    }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.22); background: rgba(255,255,255,.09);}
+    .btn.primary{
+      background: linear-gradient(135deg, var(--blue1), var(--blue2));
+      border-color: rgba(255,255,255,.18);
+      box-shadow: 0 18px 40px rgba(47,107,255,.22);
+    }
+    .btn.primary:hover{ transform: translateY(-1px) scale(1.01); }
+
+    .arrow{
+      width:18px; height:18px; border-radius:9px;
+      background: rgba(0,0,0,.20);
+      display:grid; place-items:center;
+      border:1px solid rgba(255,255,255,.16);
+    }
+
+    .fine{
+      margin-top: 10px;
+      color: rgba(255,255,255,.62);
+      font-size: 13px;
+      line-height:1.5;
+    }
+
+    /* Stats */
+    .stats{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:12px;
+      margin-top: 18px;
+    }
+    @media (max-width: 560px){
+      .stats{grid-template-columns:1fr}
+    }
+    .stat{
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius: 16px;
+      padding: 14px 14px;
+      backdrop-filter: blur(10px);
+    }
+    .stat b{display:block; font-size: 16px; margin-bottom: 2px}
+    .stat span{color: var(--muted); font-size: 13px}
+
+    /* Right card */
+    .side{
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .side::after{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(520px 260px at 20% 20%, rgba(0,226,195,.18), transparent 60%),
+        radial-gradient(520px 260px at 80% 30%, rgba(32,198,255,.18), transparent 60%);
+      opacity:.9; pointer-events:none;
+    }
+    .side-inner{position:relative; padding: 22px}
+    .box-title{margin:0 0 12px; font-size: 16px; letter-spacing:-0.01em}
+    .checklist{margin:0; padding:0; list-style:none; display:grid; gap:10px}
+    .check{
+      display:flex; gap:10px; align-items:flex-start;
+      padding: 10px 10px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .tick{
+      width:22px; height:22px; border-radius:8px;
+      background: linear-gradient(135deg, rgba(32,198,255,.9), rgba(0,226,195,.9));
+      display:grid; place-items:center;
+      color:#001018;
+      font-weight:900;
+      flex: 0 0 auto;
+      box-shadow: 0 10px 28px rgba(32,198,255,.18);
+    }
+    .check p{margin:0; color: rgba(255,255,255,.78); font-size: 13.5px; line-height:1.45}
+
+    /* Sections */
+    .section{
+      margin-top: 28px;
+      padding: 22px;
+      background: rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      box-shadow: 0 16px 50px rgba(0,0,0,.25);
+    }
+    .section h2{
+      margin:0 0 10px;
+      font-size: 22px;
+      letter-spacing:-0.01em;
+    }
+    .grid3{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:12px;
+      margin-top: 14px;
+    }
+    @media (max-width: 900px){ .grid3{grid-template-columns:1fr} }
+    .card{
+      padding: 16px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .card b{display:block; margin-bottom: 6px}
+    .card p{margin:0; color: var(--muted); line-height:1.55; font-size: 14px}
+
+    /* Process */
+    .steps{
+      display:grid; gap:10px; margin-top: 14px;
+    }
+    .step{
+      display:flex; gap:12px; align-items:flex-start;
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .badge{
+      width:34px; height:34px; border-radius: 14px;
+      display:grid; place-items:center;
+      background: rgba(47,107,255,.18);
+      border:1px solid rgba(47,107,255,.30);
+      color: rgba(255,255,255,.88);
+      font-weight:700;
+      flex: 0 0 auto;
+    }
+    .step b{display:block; margin-bottom: 2px}
+    .step span{display:block; color: var(--muted); font-size: 13.5px; line-height:1.45}
+
+    /* Footer CTA */
+    .footer-cta{
+      margin-top: 22px;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px; flex-wrap:wrap;
+      padding: 16px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(47,107,255,.22), rgba(32,198,255,.12));
+      border:1px solid rgba(255,255,255,.14);
+    }
+    .footer-cta b{font-size: 15px}
+    .footer-cta span{display:block; color: rgba(255,255,255,.70); font-size: 13px; margin-top:4px}
+
+    /* Small helper */
+    .muted{color: var(--muted)}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <b><!-- EDITA ESTO --> AYC Salud</b><br>
+          <span class="muted" style="font-size:13px;"><!-- EDITA ESTO --> Implementación & Cumplimiento</span>
+        </div>
+      </div>
+
+      <div class="pill">
+        <span class="dot"></span>
+        <!-- EDITA ESTO --> Acompañamiento legal + técnico
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="panel">
+        <div class="panel-inner">
+          <div class="kicker">
+            <span class="spark" aria-hidden="true"></span>
+            <!-- EDITA ESTO --> Implementación Resolución 3100
+          </div>
+
+          <h1><!-- EDITA ESTO --> Cumple la normativa sin estrés, sin reprocesos y con soporte real.</h1>
+
+          <p class="sub">
+            <!-- EDITA ESTO -->
+            Te guiamos paso a paso en la implementación: diagnóstico, ajustes, documentación y preparación para visita.
+            Enfoque práctico, claro y verificable.
+          </p>
+
+          <div class="cta-row">
+            <!-- CTA PRINCIPAL: CAMBIA EL LINK EN href -->
+            <a class="btn primary" href="https://tupagina.com" target="_blank" rel="noopener">
+              <!-- EDITA ESTO --> Solicitar diagnóstico
+              <span class="arrow" aria-hidden="true">➜</span>
+            </a>
+
+            <!-- CTA SECUNDARIO: opcional -->
+            <a class="btn" href="https://tupagina.com" target="_blank" rel="noopener">
+              <!-- EDITA ESTO --> Ver servicios
+            </a>
+          </div>
+
+          <div class="fine">
+            <!-- EDITA ESTO -->
+            *Respuesta rápida. Puedes cambiar el link a WhatsApp, formulario o página principal.
+          </div>
+
+          <div class="stats">
+            <div class="stat">
+              <b><!-- EDITA ESTO --> Diagnóstico</b>
+              <span><!-- EDITA ESTO --> Identificamos brechas y prioridades</span>
+            </div>
+            <div class="stat">
+              <b><!-- EDITA ESTO --> Implementación</b>
+              <span><!-- EDITA ESTO --> Acompañamiento paso a paso</span>
+            </div>
+            <div class="stat">
+              <b><!-- EDITA ESTO --> Listos para visita</b>
+              <span><!-- EDITA ESTO --> Evidencias y soporte documental</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIDE CARD -->
+      <div class="side">
+        <div class="side-inner">
+          <p class="box-title"><b><!-- EDITA ESTO --> ¿Para quién es esto?</b></p>
+          <ul class="checklist">
+            <li class="check">
+              <div class="tick">✓</div>
+              <p><!-- EDITA ESTO --> IPS que necesitan habilitación o actualización documental.</p>
+            </li>
+            <li class="check">
+              <div class="tick">✓</div>
+              <p><!-- EDITA ESTO --> Profesionales independientes que quieren cumplir sin perder tiempo.</p>
+            </li>
+            <li class="check">
+              <div class="tick">✓</div>
+              <p><!-- EDITA ESTO --> Equipos administrativos que requieren orden, trazabilidad y soporte.</p>
+            </li>
+          </ul>
+
+          <div style="height:14px"></div>
+
+          <p class="box-title"><b><!-- EDITA ESTO --> Lo que obtienes</b></p>
+          <ul class="checklist">
+            <li class="check">
+              <div class="tick">✓</div>
+              <p><!-- EDITA ESTO --> Plan de trabajo con prioridades (qué va primero y por qué).</p>
+            </li>
+            <li class="check">
+              <div class="tick">✓</div>
+              <p><!-- EDITA ESTO --> Revisión y ajustes de evidencias/documentos.</p>
+            </li>
+            <li class="check">
+              <div class="tick">✓</div>
+              <p><!-- EDITA ESTO --> Acompañamiento hasta dejar todo “presentable”.</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- BENEFICIOS -->
+    <div class="section">
+      <h2><!-- EDITA ESTO --> Beneficios (lo que te ahorras)</h2>
+      <div class="grid3">
+        <div class="card">
+          <b><!-- EDITA ESTO --> Menos riesgo</b>
+          <p><!-- EDITA ESTO --> Evitas sanciones, hallazgos y devoluciones por documentación incompleta.</p>
+        </div>
+        <div class="card">
+          <b><!-- EDITA ESTO --> Menos desgaste</b>
+          <p><!-- EDITA ESTO --> No improvisas: te damos orden, ruta y entregables claros.</p>
+        </div>
+        <div class="card">
+          <b><!-- EDITA ESTO --> Más control</b>
+          <p><!-- EDITA ESTO --> Evidencias trazables y checklist para saber exactamente en qué vas.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROCESO -->
+    <div class="section">
+      <h2><!-- EDITA ESTO --> ¿Cómo trabajamos?</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="badge">1</div>
+          <div>
+            <b><!-- EDITA ESTO --> Diagnóstico</b>
+            <span><!-- EDITA ESTO --> Revisamos tu estado actual y definimos brechas y prioridades.</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="badge">2</div>
+          <div>
+            <b><!-- EDITA ESTO --> Implementación</b>
+            <span><!-- EDITA ESTO --> Ajustes, documentos, evidencias y acompañamiento operativo.</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="badge">3</div>
+          <div>
+            <b><!-- EDITA ESTO --> Preparación final</b>
+            <span><!-- EDITA ESTO --> Checklist final para visita y soporte en el cierre.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-cta">
+        <div>
+          <b><!-- EDITA ESTO --> ¿Lista/o para ordenar todo y cumplir bien?</b>
+          <span><!-- EDITA ESTO --> Haz clic y te llevamos a la página de AYC Salud (o a tu formulario/WhatsApp).</span>
+        </div>
+
+        <!-- CTA FINAL: CAMBIA EL LINK -->
+        <a class="btn primary" href="https://tupagina.com" target="_blank" rel="noopener">
+          <!-- EDITA ESTO --> Ir al link
+          <span class="arrow" aria-hidden="true">➜</span>
+        </a>
+      </div>
+    </div>
+
+    <div style="height:18px"></div>
+    <div class="muted" style="font-size:12.5px; text-align:center;">
+      <!-- EDITA ESTO -->
+      © <span id="year"></span> AYC Salud — Landing de implementación
+    </div>
+
+  </div>
+
+  <script>
+    // Año automático
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
